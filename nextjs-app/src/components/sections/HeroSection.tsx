@@ -135,21 +135,6 @@ export default function HeroSection() {
             </button>
           </motion.div>
 
-          <motion.div className="hero-stats" variants={fadeUp}>
-            {[
-              { num: '50+', lbl: 'Fragrances' },
-              { num: '5K+', lbl: 'Customers' },
-              { num: '25+', lbl: 'Countries' },
-            ].map(({ num, lbl }, i) => (
-              <div key={lbl} style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                {i > 0 && <div className="hero-stat-div" />}
-                <div>
-                  <span className="hero-stat-num">{num}</span>
-                  <span className="hero-stat-lbl">{lbl}</span>
-                </div>
-              </div>
-            ))}
-          </motion.div>
         </motion.div>
       </div>
 
