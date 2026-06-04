@@ -13,10 +13,6 @@ nextjs-app/.env.*.local
 .env
 .env.local
 
-# ── Large media files (video) ─────────────────────────────────────────
-# Keep images but skip the 77 MB video to stay within GitHub limits
-nextjs-app/public/al_hoorain.mp4
-
 # ── OS / Editor ───────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
