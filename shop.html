@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Al Hoorain Aroma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .shop-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            margin-top: 100px;
+        }
+
+        .filters {
+            background: #ffffff;
+            border: 1px solid var(--border-dark);
+            padding: 1.5rem;
+            border-radius: 12px;
+            height: fit-content;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h3 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .filter-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            color: var(--text-gray);
+            transition: color 0.2s;
+        }
+
+        .filter-option input:checked+label {
+            color: var(--accent-gold);
+        }
+
+        .sort-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .sort-select {
+            background: #ffffff;
+            border: 1px solid var(--border-dark);
+            color: var(--text-white);
+            padding: 0.7rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .shop-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .shop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                display: none;
+            }
+
+            .sort-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- TICKER BAND -->
+    <div class="ticker-band" aria-hidden="true">
+        <div class="ticker-track">
+            <span>✦ FREE SHIPPING OVER $300</span>
+            <span>✦ AUTHENTIC LUXURY FRAGRANCES</span>
+            <span>✦ COMPLIMENTARY GIFT PACKAGING</span>
+            <span>✦ NEW ARRIVALS WEEKLY</span>
+            <span>✦ WORLDWIDE DELIVERY</span>
+            <span>✦ MASTER PERFUMERS SINCE 2014</span>
+            <span>✦ FREE SHIPPING OVER $300</span>
+            <span>✦ AUTHENTIC LUXURY FRAGRANCES</span>
+            <span>✦ COMPLIMENTARY GIFT PACKAGING</span>
+            <span>✦ NEW ARRIVALS WEEKLY</span>
+            <span>✦ WORLDWIDE DELIVERY</span>
+            <span>✦ MASTER PERFUMERS SINCE 2014</span>
+        </div>
+    </div>
+
+    <!-- SCROLL PROGRESS -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <h1>✨ AL HOORAIN</h1>
+                <p>AROMA</p>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html" class="active">Shop</a></li>
+                <li class="search-wrapper">
+                    <input type="text" id="searchInput" class="search-bar" placeholder="Search fragrances...">
+                    <div id="searchResults" class="search-results"></div>
+                </li>
+            </ul>
+            <div class="nav-actions">
+                <button id="wishlistBtn" class="icon-btn">❤️ <span class="badge">0</span></button>
+                <button id="cartBtn" class="icon-btn">🛍️ <span class="badge">0</span></button>
+                <button id="accountBtn" class="icon-btn">👤</button>
+                <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="shop-container">
+        <aside class="filters">
+            <div class="filter-group">
+                <h3>PRICE</h3>
+                <div class="filter-option">
+                    <input type="checkbox" id="price1" value="under200">
+                    <label for="price1">Under $200</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="price2" value="200-250">
+                    <label for="price2">$200 - $250</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="price3" value="above250">
+                    <label for="price3">Above $250</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <h3>CATEGORY</h3>
+                <div class="filter-option">
+                    <input type="checkbox" id="cat1" value="fresh">
+                    <label for="cat1">Fresh</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="cat2" value="floral">
+                    <label for="cat2">Floral</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="cat3" value="woody">
+                    <label for="cat3">Woody</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="cat4" value="oriental">
+                    <label for="cat4">Oriental</label>
+                </div>
+            </div>
+
+            <button class="cta-button" style="width: 100%; margin-top: 1rem;" onclick="resetFilters()">RESET
+                FILTERS</button>
+        </aside>
+
+        <div>
+            <div class="sort-container">
+                <h2 style="color: var(--accent-gold);">ALL FRAGRANCES</h2>
+                <select id="sortSelect" class="sort-select">
+                    <option value="newest">Newest</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Top Rated</option>
+                </select>
+            </div>
+            <div class="shop-products" id="shopProducts"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>ABOUT US</h4>
+                <p>Premium luxury fragrances crafted for the discerning individual.</p>
+            </div>
+            <div class="footer-section">
+                <h4>QUICK LINKS</h4>
+                <ul>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>FOLLOW US</h4>
+                <div class="social-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2024 Al Hoorain Aroma. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/search.js"></script>
+    <script>
+        let filteredProducts = [...products];
+
+        function applyFilters() {
+            let filtered = [...products];
+
+            // Price filters — fixed selector (was broken: '[id^="price"] input:checked')
+            const priceFilters = Array.from(document.querySelectorAll('input[id^="price"]:checked'));
+            if (priceFilters.length > 0) {
+                filtered = filtered.filter(p =>
+                    priceFilters.some(f => {
+                        if (f.value === 'under200') return p.price < 200;
+                        if (f.value === '200-250') return p.price >= 200 && p.price <= 250;
+                        if (f.value === 'above250') return p.price > 250;
+                        return false;
+                    })
+                );
+            }
+
+            // Category filters — fixed selector (was broken: '[id^="cat"] input:checked')
+            const categoryFilters = Array.from(document.querySelectorAll('input[id^="cat"]:checked'));
+            if (categoryFilters.length > 0) {
+                filtered = filtered.filter(p =>
+                    categoryFilters.some(f => p.category === f.value)
+                );
+            }
+
+            filteredProducts = filtered;
+            applySorting();
+        }
+
+        function applySorting() {
+            const sortValue = document.getElementById('sortSelect').value;
+            let sorted = [...filteredProducts];
+
+            if (sortValue === 'price-low') {
+                sorted.sort((a, b) => a.price - b.price);
+            } else if (sortValue === 'price-high') {
+                sorted.sort((a, b) => b.price - a.price);
+            } else if (sortValue === 'rating') {
+                sorted.sort((a, b) => b.rating - a.rating);
+            }
+
+            renderProducts('shopProducts', sorted);
+        }
+
+        function resetFilters() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            applyFilters();
+        }
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', applyFilters);
+        });
+
+        document.getElementById('sortSelect').addEventListener('change', applySorting);
+
+        // Mobile menu
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts('shopProducts', products);
+            updateCartBadge();
+            updateWishlistBadge();
+
+            // Scroll progress
+            const bar = document.getElementById('scrollProgress');
+            if (bar) {
+                window.addEventListener('scroll', () => {
+                    const d = document.documentElement.scrollHeight - window.innerHeight;
+                    bar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
+                }, { passive: true });
+            }
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    navbar.classList.toggle('scrolled', window.scrollY > 50);
+                }, { passive: true });
+            }
+
+            // Mobile menu
+            const btn = document.getElementById('mobileMenuBtn');
+            const nav = document.getElementById('navLinks');
+            if (btn && nav) {
+                if (window.innerWidth > 768) btn.style.display = 'none';
+                btn.addEventListener('click', () => {
+                    const open = nav.classList.toggle('mobile-open');
+                    btn.textContent = open ? '✕' : '☰';
+                });
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768) {
+                        btn.style.display = 'none';
+                        nav.classList.remove('mobile-open');
+                    } else {
+                        btn.style.display = 'flex';
+                    }
+                });
+            }
+
+            // Navigation buttons
+            const cartBtn = document.getElementById('cartBtn');
+            const accountBtn = document.getElementById('accountBtn');
+            const wishlistBtn = document.getElementById('wishlistBtn');
+            if (cartBtn) cartBtn.addEventListener('click', () => window.location.href = 'cart.html');
+            if (accountBtn) accountBtn.addEventListener('click', () => window.location.href = 'account.html');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - Al Hoorain Aroma</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .account-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            margin-top: 100px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-dark);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-white);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--secondary-dark);
+            border: 1px solid var(--border-dark);
+            color: var(--text-white);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .order-item {
+            background: var(--secondary-dark);
+            border: 1px solid var(--border-dark);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .order-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .order-status {
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .account-container {
+                padding: 1rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .form-group input {
+                font-size: 16px;
+                /* Prevents zoom on mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">
+                <h1>✨ AL HOORAIN</h1>
+                <p>Aroma</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button id="wishlistBtn" class="icon-btn">❤️ <span class="badge">0</span></button>
+                <button id="cartBtn" class="icon-btn">🛍️ <span class="badge">0</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="account-container">
+        <h1 style="color: var(--accent-gold); margin-bottom: 2rem;">MY ACCOUNT</h1>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('login')">LOGIN / REGISTER</button>
+            <button class="tab-btn" onclick="switchTab('profile')">PROFILE</button>
+            <button class="tab-btn" onclick="switchTab('orders')">ORDER HISTORY</button>
+        </div>
+
+        <!-- LOGIN TAB -->
+        <div id="login" class="tab-content active">
+            <div style="max-width: 500px;">
+                <h2 style="color: var(--accent-gold); margin-bottom: 1.5rem;">LOGIN</h2>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <button class="cta-button" style="width: 100%;" onclick="handleLogin()">SIGN IN</button>
+
+                <hr style="border: none; border-top: 1px solid var(--border-dark); margin: 2rem 0;">
+
+                <h2 style="color: var(--accent-gold); margin-bottom: 1.5rem; margin-top: 2rem;">CREATE ACCOUNT</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••">
+                </div>
+                <button class="cta-button" style="width: 100%; background: var(--border-dark);"
+                    onclick="handleRegister()">CREATE ACCOUNT</button>
+            </div>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div id="profile" class="tab-content">
+            <div style="max-width: 500px;">
+                <h2 style="color: var(--accent-gold); margin-bottom: 1.5rem;">MY PROFILE</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="profileName" placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="profileEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="profilePhone" placeholder="+1 (555) 000-0000">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="profileAddress" placeholder="Street Address">
+                </div>
+                <button class="cta-button" style="width: 100%;" onclick="saveProfile()">SAVE CHANGES</button>
+            </div>
+        </div>
+
+        <!-- ORDERS TAB -->
+        <div id="orders" class="tab-content">
+            <h2 style="color: var(--accent-gold); margin-bottom: 1.5rem;">ORDER HISTORY</h2>
+            <div id="ordersContainer">
+                <p style="color: var(--text-gray);">No orders yet. <a href="shop.html"
+                        style="color: var(--accent-gold);">Start shopping</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="footer-bottom">&copy; 2024 Al Hoorain Aroma. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (email && password) {
+                localStorage.setItem('user', JSON.stringify({ email, loggedIn: true }));
+                alert('Login successful!');
+                switchTab('profile');
+                loadProfile();
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (name && email && password) {
+                localStorage.setItem('user', JSON.stringify({ name, email, loggedIn: true }));
+                alert('Account created successfully!');
+                switchTab('profile');
+                loadProfile();
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        function loadProfile() {
+            const user = JSON.parse(localStorage.getItem('user')) || {};
+            if (user.loggedIn) {
+                document.getElementById('profileName').value = user.name || '';
+                document.getElementById('profileEmail').value = user.email || '';
+                document.getElementById('profilePhone').value = user.phone || '';
+                document.getElementById('profileAddress').value = user.address || '';
+            }
+        }
+
+        function saveProfile() {
+            const user = {
+                name: document.getElementById('profileName').value,
+                email: document.getElementById('profileEmail').value,
+                phone: document.getElementById('profilePhone').value,
+                address: document.getElementById('profileAddress').value,
+                loggedIn: true
+            };
+            localStorage.setItem('user', JSON.stringify(user));
+            alert('Profile updated!');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            // Load orders from localStorage
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const ordersContainer = document.getElementById('ordersContainer');
+
+            if (orders.length > 0) {
+                ordersContainer.innerHTML = orders.map((order, i) => `
+                    <div class="order-item">
+                        <div class="order-item-header">
+                            <div>
+                                <strong style="color: var(--text-white);">Order #${i + 1}</strong>
+                                <p style="color: var(--text-gray); font-size: 0.9rem;">Date: ${order.date}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: var(--accent-gold); font-weight: 700; margin-bottom: 0.5rem;">$${order.total}</div>
+                                <div class="order-status">✓ Delivered</div>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-gray); font-size: 0.9rem;">${order.items} items</p>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+
+</html>
