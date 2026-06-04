@@ -142,7 +142,7 @@ export default function CheckoutModal() {
               </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: step === 'confirmed' ? '1fr' : '1fr 300px', minHeight: 400 }}>
+            <div className="checkout-grid-mobile" style={{ display: 'grid', gridTemplateColumns: step === 'confirmed' ? '1fr' : '1fr 300px', minHeight: 400 }}>
               {/* Main form area */}
               <div style={{ padding: '2rem' }}>
 
