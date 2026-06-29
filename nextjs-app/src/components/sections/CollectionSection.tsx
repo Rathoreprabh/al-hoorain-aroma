@@ -61,7 +61,9 @@ function ProductCard({ product, index }: { product: typeof products[0]; index: n
           {inWish ? '♥' : '♡'}
         </button>
 
-        <span className="product-emoji">{product.emoji}</span>
+        {product.image
+          ? <img src={product.image} alt={product.name} className="product-img" loading="lazy" />
+          : <span className="product-emoji">{product.emoji}</span>}
 
         {/* Quick View overlay */}
         <div className="product-hover-overlay">
@@ -87,7 +89,7 @@ function ProductCard({ product, index }: { product: typeof products[0]; index: n
         </div>
 
         <div className="product-bottom">
-          <span className="product-price">${product.price}</span>
+          <span className="product-price">{product.price > 0 ? `$${product.price}` : 'Inquire'}</span>
           <motion.button
             className="add-cart-btn"
             onClick={() => addToCart(product)}
