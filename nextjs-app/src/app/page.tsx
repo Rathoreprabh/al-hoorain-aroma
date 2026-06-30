@@ -13,6 +13,7 @@ import WishlistDrawer       from '@/components/WishlistDrawer'
 import SearchModal          from '@/components/SearchModal'
 import CheckoutModal        from '@/components/CheckoutModal'
 import QuickViewModal       from '@/components/QuickViewModal'
+import AccountModal         from '@/components/AccountModal'
 import FloatingCart         from '@/components/FloatingCart'
 import LiveChat             from '@/components/LiveChat'
 
@@ -49,6 +50,7 @@ function App() {
           <SearchModal />
           <CheckoutModal />
           <QuickViewModal />
+          <AccountModal />
 
           <main>
             <HeroSection />

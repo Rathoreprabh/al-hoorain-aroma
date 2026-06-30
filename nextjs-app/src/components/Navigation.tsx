@@ -15,7 +15,7 @@ const NAV_LINKS = [
 export default function Navigation() {
   const [scrolled,     setScrolled]     = useState(false)
   const [menuOpen,     setMenuOpen]     = useState(false)
-  const { cartCount, wishlistCount, setCartOpen, setWishOpen, setSearchOpen } = useStore()
+  const { cartCount, wishlistCount, setCartOpen, setWishOpen, setSearchOpen, setAccountOpen, user } = useStore()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -87,6 +87,12 @@ export default function Navigation() {
 
           {/* Right actions */}
           <div className="nav-actions">
+            {/* Account */}
+            <button className="nav-icon-btn" title={user ? `Account — ${user.name.split(' ')[0]}` : 'Sign in'} onClick={() => { setAccountOpen(true); closeMenu() }} style={{ position: 'relative' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              {user && <span className="nav-badge" style={{ background: '#16a34a' }}>✓</span>}
+            </button>
+
             {/* Search */}
             <button className="nav-icon-btn" title="Search" onClick={() => { setSearchOpen(true); closeMenu() }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -188,8 +194,17 @@ export default function Navigation() {
                 ))}
               </nav>
 
+              {/* Account */}
+              <button
+                onClick={() => { setAccountOpen(true); closeMenu() }}
+                style={{ width: '100%', marginTop: '1.5rem', background: '#fff', border: '1px solid #d8ccb4', color: '#1a1208', padding: '0.95rem', borderRadius: '8px', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                {user ? `MY ACCOUNT — ${user.name.split(' ')[0].toUpperCase()}` : 'SIGN IN / REGISTER'}
+              </button>
+
               {/* Quick actions */}
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
                 <button
                   onClick={() => { setCartOpen(true); closeMenu() }}
                   style={{ flex: 1, background: 'linear-gradient(135deg, #b8920e, #d4af37)', color: '#fff', border: 'none', padding: '0.9rem', borderRadius: '8px', fontWeight: 700, fontSize: '0.75rem', letterSpacing: '2px', cursor: 'pointer', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react'
 import { Product } from '@/lib/products'
 
 export interface CartItem extends Product { quantity: number }
@@ -10,6 +10,22 @@ export interface Toast {
   message: string
   type: 'success' | 'error' | 'info'
 }
+
+/** Public, session-safe view of an account (never carries the password). */
+export interface AuthUser { name: string; email: string }
+
+/** Result returned by auth actions so the UI can show inline errors. */
+export interface AuthResult { ok: boolean; error?: string }
+
+const USERS_KEY   = 'ah_users'    // registered accounts (demo: stored client-side)
+const SESSION_KEY = 'ah_session'  // currently signed-in email
+
+interface StoredUser { name: string; email: string; password: string }
+
+const readUsers = (): StoredUser[] => {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY) || '[]') } catch { return [] }
+}
+const writeUsers = (u: StoredUser[]) => localStorage.setItem(USERS_KEY, JSON.stringify(u))
 
 interface StoreCtx {
   /* Cart */
@@ -42,6 +58,13 @@ interface StoreCtx {
   toasts:     Toast[]
   addToast:   (msg: string, type?: Toast['type']) => void
   removeToast:(id: number) => void
+  /* Account / Auth */
+  user:           AuthUser | null
+  accountOpen:    boolean
+  setAccountOpen: (v: boolean) => void
+  signup:         (name: string, email: string, password: string) => AuthResult
+  login:          (email: string, password: string) => AuthResult
+  logout:         () => void
 }
 
 const Ctx = createContext<StoreCtx | null>(null)
@@ -56,6 +79,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [searchOpen,    setSearchOpen]    = useState(false)
   const [checkoutOpen,  setCheckoutOpen]  = useState(false)
   const [quickViewProduct, setQuickView] = useState<Product | null>(null)
+
+  const [user,        setUser]        = useState<AuthUser | null>(null)
+  const [accountOpen, setAccountOpen] = useState(false)
 
   /* ── Toasts ── */
   const addToast = useCallback((message: string, type: Toast['type'] = 'success') => {
@@ -114,6 +140,50 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const wishlistCount = wishlist.length
 
+  /* ── Account / Auth (client-side demo; not a secure backend) ── */
+  /* Restore session on first load */
+  useEffect(() => {
+    try {
+      const email = localStorage.getItem(SESSION_KEY)
+      if (email) {
+        const found = readUsers().find(u => u.email === email)
+        if (found) setUser({ name: found.name, email: found.email })
+      }
+    } catch { /* ignore storage errors */ }
+  }, [])
+
+  const signup = useCallback((name: string, email: string, password: string): AuthResult => {
+    name = name.trim(); email = email.trim().toLowerCase()
+    if (!name || !email || !password) return { ok: false, error: 'Please fill in every field.' }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, error: 'Enter a valid email address.' }
+    if (password.length < 6) return { ok: false, error: 'Password must be at least 6 characters.' }
+    const users = readUsers()
+    if (users.some(u => u.email === email)) return { ok: false, error: 'An account with this email already exists.' }
+    users.push({ name, email, password })
+    writeUsers(users)
+    localStorage.setItem(SESSION_KEY, email)
+    setUser({ name, email })
+    addToast(`✓ Welcome, ${name.split(' ')[0]}! Your account is ready.`)
+    return { ok: true }
+  }, [addToast])
+
+  const login = useCallback((email: string, password: string): AuthResult => {
+    email = email.trim().toLowerCase()
+    if (!email || !password) return { ok: false, error: 'Enter your email and password.' }
+    const found = readUsers().find(u => u.email === email)
+    if (!found || found.password !== password) return { ok: false, error: 'Incorrect email or password.' }
+    localStorage.setItem(SESSION_KEY, email)
+    setUser({ name: found.name, email: found.email })
+    addToast(`✓ Welcome back, ${found.name.split(' ')[0]}!`)
+    return { ok: true }
+  }, [addToast])
+
+  const logout = useCallback(() => {
+    localStorage.removeItem(SESSION_KEY)
+    setUser(null)
+    addToast('You have been signed out.', 'info')
+  }, [addToast])
+
   return (
     <Ctx.Provider value={{
       cart, addToCart, removeFromCart, updateQty, clearCart, cartTotal, cartCount, isInCart,
@@ -122,6 +192,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       searchOpen, setSearchOpen, checkoutOpen, setCheckoutOpen,
       quickViewProduct, setQuickView,
       toasts, addToast, removeToast,
+      user, accountOpen, setAccountOpen, signup, login, logout,
     }}>
       {children}
     </Ctx.Provider>
