@@ -20,6 +20,12 @@ export interface AuthResult { ok: boolean; error?: string }
 const USERS_KEY   = 'ah_users'    // registered accounts (demo: stored client-side)
 const SESSION_KEY = 'ah_session'  // currently signed-in email
 
+/* Built-in admin account. Client-side only — for a real store this check
+   must move server-side. Sign in with these to unlock the Admin Panel. */
+export const ADMIN_EMAIL = 'admin@alhoorain.com'
+const ADMIN_PASSWORD     = 'alhoorain@admin'
+const ADMIN_NAME         = 'Store Admin'
+
 interface StoredUser { name: string; email: string; password: string }
 
 const readUsers = (): StoredUser[] => {
@@ -60,8 +66,11 @@ interface StoreCtx {
   removeToast:(id: number) => void
   /* Account / Auth */
   user:           AuthUser | null
+  isAdmin:        boolean
   accountOpen:    boolean
   setAccountOpen: (v: boolean) => void
+  adminOpen:      boolean
+  setAdminOpen:   (v: boolean) => void
   signup:         (name: string, email: string, password: string) => AuthResult
   login:          (email: string, password: string) => AuthResult
   logout:         () => void
@@ -81,7 +90,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [quickViewProduct, setQuickView] = useState<Product | null>(null)
 
   const [user,        setUser]        = useState<AuthUser | null>(null)
+  const [isAdmin,     setIsAdmin]     = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const [adminOpen,   setAdminOpen]   = useState(false)
 
   /* ── Toasts ── */
   const addToast = useCallback((message: string, type: Toast['type'] = 'success') => {
@@ -141,13 +152,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const wishlistCount = wishlist.length
 
   /* ── Account / Auth (client-side demo; not a secure backend) ── */
-  /* Restore session on first load */
+  /* Seed the built-in admin account, then restore any active session */
   useEffect(() => {
     try {
+      const users = readUsers()
+      if (!users.some(u => u.email === ADMIN_EMAIL)) {
+        users.push({ name: ADMIN_NAME, email: ADMIN_EMAIL, password: ADMIN_PASSWORD })
+        writeUsers(users)
+      }
       const email = localStorage.getItem(SESSION_KEY)
       if (email) {
-        const found = readUsers().find(u => u.email === email)
-        if (found) setUser({ name: found.name, email: found.email })
+        const found = users.find(u => u.email === email)
+        if (found) { setUser({ name: found.name, email: found.email }); setIsAdmin(found.email === ADMIN_EMAIL) }
       }
     } catch { /* ignore storage errors */ }
   }, [])
@@ -174,13 +190,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (!found || found.password !== password) return { ok: false, error: 'Incorrect email or password.' }
     localStorage.setItem(SESSION_KEY, email)
     setUser({ name: found.name, email: found.email })
-    addToast(`✓ Welcome back, ${found.name.split(' ')[0]}!`)
+    const admin = found.email === ADMIN_EMAIL
+    setIsAdmin(admin)
+    addToast(admin ? `✓ Admin signed in — welcome back!` : `✓ Welcome back, ${found.name.split(' ')[0]}!`)
     return { ok: true }
   }, [addToast])
 
   const logout = useCallback(() => {
     localStorage.removeItem(SESSION_KEY)
     setUser(null)
+    setIsAdmin(false)
+    setAdminOpen(false)
     addToast('You have been signed out.', 'info')
   }, [addToast])
 
@@ -192,7 +212,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       searchOpen, setSearchOpen, checkoutOpen, setCheckoutOpen,
       quickViewProduct, setQuickView,
       toasts, addToast, removeToast,
-      user, accountOpen, setAccountOpen, signup, login, logout,
+      user, isAdmin, accountOpen, setAccountOpen, adminOpen, setAdminOpen, signup, login, logout,
     }}>
       {children}
     </Ctx.Provider>

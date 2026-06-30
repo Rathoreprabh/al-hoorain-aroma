@@ -9,9 +9,9 @@ type Tab = 'login' | 'register' | 'forgot'
 
 export default function AccountModal() {
   const {
-    accountOpen, setAccountOpen, user,
+    accountOpen, setAccountOpen, user, isAdmin,
     login, signup, logout,
-    setWishOpen, setCartOpen,
+    setWishOpen, setCartOpen, setAdminOpen,
   } = useStore()
 
   const [tab, setTab]       = useState<Tab>('login')
@@ -115,6 +115,12 @@ export default function AccountModal() {
                       <p style={{ fontSize: '0.8rem', color: '#8a7a60', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</p>
                     </div>
                   </div>
+
+                  {isAdmin && (
+                    <button onClick={() => { close(); setAdminOpen(true) }} style={{ width: '100%', marginBottom: '1.2rem', background: 'linear-gradient(135deg, #1a1208, #2a1f0e)', color: '#d4af37', border: '1px solid #d4af37', padding: '0.95rem', borderRadius: '10px', cursor: 'pointer', fontWeight: 700, fontSize: '0.8rem', letterSpacing: '1.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                      ⚙ Open Admin Dashboard
+                    </button>
+                  )}
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem', marginBottom: '1.6rem' }}>
                     <button onClick={() => { close(); setCartOpen(true) }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.95rem 1.1rem', background: '#fff', border: '1px solid #e8dfd0', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, color: '#1a1208' }}>

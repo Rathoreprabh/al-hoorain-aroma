@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { StoreProvider }    from '@/lib/store'
+import { ProductsProvider } from '@/lib/productsStore'
 import LoadingScreen        from '@/components/LoadingScreen'
 import SmoothScrollProvider from '@/components/SmoothScrollProvider'
 import FixedBackground      from '@/components/FixedBackground'
@@ -14,6 +15,7 @@ import SearchModal          from '@/components/SearchModal'
 import CheckoutModal        from '@/components/CheckoutModal'
 import QuickViewModal       from '@/components/QuickViewModal'
 import AccountModal         from '@/components/AccountModal'
+import AdminPanel           from '@/components/AdminPanel'
 import FloatingCart         from '@/components/FloatingCart'
 import LiveChat             from '@/components/LiveChat'
 
@@ -51,6 +53,7 @@ function App() {
           <CheckoutModal />
           <QuickViewModal />
           <AccountModal />
+          <AdminPanel />
 
           <main>
             <HeroSection />
@@ -75,7 +78,9 @@ function App() {
 export default function HomePage() {
   return (
     <StoreProvider>
-      <App />
+      <ProductsProvider>
+        <App />
+      </ProductsProvider>
     </StoreProvider>
   )
 }

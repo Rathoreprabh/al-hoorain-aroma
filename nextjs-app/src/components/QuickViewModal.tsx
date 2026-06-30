@@ -52,7 +52,7 @@ export default function QuickViewModal() {
                 <span style={{ position: 'absolute', top: '1.2rem', left: '1.2rem', background: 'linear-gradient(135deg, #b8920e, #d4af37)', color: '#fff', fontSize: '0.58rem', letterSpacing: '2px', fontWeight: 700, padding: '0.25rem 0.8rem', borderRadius: '2px', textTransform: 'uppercase' }}>{p.badge}</span>
               )}
               {p.image
-                ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
+                ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1.5rem', position: 'absolute', inset: 0 }} />
                 : <span style={{ fontSize: '7rem', filter: 'drop-shadow(0 16px 40px rgba(184,146,14,0.22))' }}>{p.emoji}</span>}
             </div>
 

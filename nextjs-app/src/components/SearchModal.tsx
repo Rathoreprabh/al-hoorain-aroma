@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
-import { products } from '@/lib/products'
+import { useProducts } from '@/lib/productsStore'
 import { useScrollLock } from '@/hooks/useScrollLock'
 
 export default function SearchModal() {
   const { searchOpen, setSearchOpen, addToCart, setQuickView } = useStore()
+  const { products } = useProducts()
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   useScrollLock(searchOpen)

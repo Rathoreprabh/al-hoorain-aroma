@@ -1,15 +1,29 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { products } from '@/lib/products'
+import { Product } from '@/lib/products'
+import { useProducts, productImages } from '@/lib/productsStore'
 import { useStore } from '@/lib/store'
 
-function ProductCard({ product, index }: { product: typeof products[0]; index: number }) {
+function ProductCard({ product, index }: { product: Product; index: number }) {
   const { addToCart, toggleWishlist, isInWishlist, setQuickView } = useStore()
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [hovering, setHovering] = useState(false)
+  const [frame, setFrame] = useState(0)
   const inWish = isInWishlist(product.id)
+
+  const imgs = productImages(product)
+
+  /* Auto-scroll through the gallery while hovering */
+  useEffect(() => {
+    if (!hovering || imgs.length < 2) return
+    const t = setInterval(() => setFrame(f => (f + 1) % imgs.length), 1100)
+    return () => clearInterval(t)
+  }, [hovering, imgs.length])
+
+  /* Always return to the cover when the pointer leaves */
+  useEffect(() => { if (!hovering) setFrame(0) }, [hovering])
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -61,9 +75,27 @@ function ProductCard({ product, index }: { product: typeof products[0]; index: n
           {inWish ? '♥' : '♡'}
         </button>
 
-        {product.image
-          ? <img src={product.image} alt={product.name} className="product-img" loading="lazy" />
+        {imgs.length > 0
+          ? imgs.map((src, i) => (
+              <img
+                key={src}
+                src={src}
+                alt={`${product.name} — view ${i + 1}`}
+                className="product-img"
+                loading="lazy"
+                style={{ opacity: i === frame ? 1 : 0 }}
+              />
+            ))
           : <span className="product-emoji">{product.emoji}</span>}
+
+        {/* Gallery dots */}
+        {imgs.length > 1 && (
+          <div className="product-dots">
+            {imgs.map((_, i) => (
+              <span key={i} className={`product-dot${i === frame ? ' active' : ''}`} />
+            ))}
+          </div>
+        )}
 
         {/* Quick View overlay */}
         <div className="product-hover-overlay">
@@ -108,6 +140,7 @@ function ProductCard({ product, index }: { product: typeof products[0]; index: n
 export default function CollectionSection() {
   const ref    = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const { products } = useProducts()
 
   return (
     <section className="collection-section" id="collection" ref={ref}>
