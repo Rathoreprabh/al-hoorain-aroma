@@ -1086,6 +1086,9 @@ html.lenis { height: auto; }
 
   /* Checkout modal on mobile */
   .checkout-grid-mobile { grid-template-columns: 1fr !important; }
+
+  /* Quick View modal stacks (image over details) on mobile */
+  .quickview-card { grid-template-columns: 1fr !important; overflow-y: auto !important; }
 }
 
 @media (max-width: 480px) {

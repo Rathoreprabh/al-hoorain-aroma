@@ -24,22 +24,26 @@ export default function QuickViewModal() {
             onClick={() => setQuickView(null)}
             style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9200, backdropFilter: 'blur(4px)' }}
           />
+          {/* Centering wrapper — separate from the animated div so framer's
+              transform (scale/y) doesn't clobber a CSS translate centering. */}
+          <div style={{ position: 'fixed', inset: 0, zIndex: 9201, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', pointerEvents: 'none' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+            className="quickview-card"
             style={{
-              position: 'fixed', top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '92%', maxWidth: 780,
+              position: 'relative',
+              width: '100%', maxWidth: 780,
+              maxHeight: '90vh',
               background: '#fff',
               borderRadius: '16px',
-              zIndex: 9201,
               overflow: 'hidden',
               boxShadow: '0 40px 100px rgba(0,0,0,0.25)',
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
+              pointerEvents: 'auto',
             }}
           >
             {/* Left — image */}
@@ -101,6 +105,7 @@ export default function QuickViewModal() {
               </button>
             </div>
           </motion.div>
+          </div>{/* /centering wrapper */}
         </>
       )}
     </AnimatePresence>
